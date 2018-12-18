@@ -1,0 +1,64 @@
+.enroll-address-btn {
+    float: right;
+    min-width: 120px;
+    margin-top: -5px;
+    height: 36px;
+}
+
+.header h2 {
+    width: 50%;
+    display: inline;
+}
+
+span {
+    display: inline-block;
+}
+
+.search-btn {
+    float: right;
+    min-width: 120px;
+}
+
+.download-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin-top: 60px;
+}
+
+.copy-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin-top: 50px;
+}
+
+.close-btn {
+    min-width: 120px;
+    margin-right: 8px;
+}
+
+.qrcode-div {
+    height: 70%;
+}
+
+.qrcode {
+    width: 60%;
+    display: inline-block;
+}
+
+.qrcode canvas {
+    margin-left: 35%;
+}
+
+.link-div {
+    height: 30%;
+
+}
+
+.link-div .form-group {
+    display: inline-block;
+    margin-left: 21%;
+    margin-top: 50px;
+    width: 40% !important;
+}

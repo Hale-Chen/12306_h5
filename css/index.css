@@ -1,0 +1,22 @@
+#logo {
+    width: 180px;
+    height: 39px;
+    margin-top: 6px;
+    margin-left: 37px;
+}
+
+.navbar-brand {
+    padding: 0;
+}
+
+.navbar-brand .admin {
+    color: #FFFFFF;
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 15px;
+    padding-left: 35px;
+}
+
+.right-sidebar .nav-tabs li:last-child {
+    width: 100%;
+}

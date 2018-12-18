@@ -1,0 +1,29 @@
+.view-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin-top: -25px;
+}
+
+.edit-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 20px 0px 0px;
+}
+
+.save-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 0px 0px 20px;
+}
+
+.dropdown-menu {
+    max-height: 450px !important;
+}
+
+.header h2 {
+    font-weight: bolder !important;
+}
+

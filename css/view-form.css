@@ -1,0 +1,38 @@
+.view-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 20px 0px 0px;
+}
+
+.edit-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 20px 0px 0px;
+}
+
+.download-full-btn {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 20px 0px 0px;
+}
+
+.download-btn-1 {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 20px 0px 0px;
+}
+
+.download-btn-2 {
+    min-width: 120px;
+    float: right;
+    display: inline-block;
+    margin: -25px 0px 0px 0px;
+}
+
+.header h2 {
+    font-weight: bolder !important;
+}
