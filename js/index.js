@@ -199,10 +199,8 @@ $("body").on("click",".success-button",function () {
     if(result == false){
         showErrorMessage("手机号不正确");
     }else {
-        var content = "小助手抢票已完成，请尽快去12306官方进行车票支付。" +
-            "温馨提示：开车前2小时以外的车票，须在30分钟内完成支付，开车前2小时以内的车票，须在10分钟内完成支付。" +
-            "客服电话：19946187917【小助手】";
-        sendMsg(mobile, content);
+        var url = "http://localhost:8080/admin/sendMsgSuccess";
+        sendMsg(mobile, url);
     }
 });
 
@@ -212,10 +210,8 @@ $("body").on("click",".cross-button",function () {
     var rex = /^1\d{10}$/;
     var result = rex.test(mobile);
     if(result == true) {
-        var content = "您的票已完成跨站抢票，请尽快去12306官方进行车票支付。" +
-            "温馨提示：开车前2小时以外的车票，须在30分钟内完成支付，开车前2小时以内的车票，须在10分钟内完成支付。" +
-            "客服电话：19946187917【小助手】";
-        sendMsg(mobile, content);
+        var url = "http://localhost:8080/admin/sendMsgCross";
+        sendMsg(mobile, url);
     }else{
         showErrorMessage("手机号不正确");
     }
@@ -227,8 +223,8 @@ $("body").on("click",".conflict-button",function () {
     var rex = /^1\d{10}$/;
     var result = rex.test(mobile);
     if(result == true) {
-        var content = "您的抢票订单与已有行程冲突，请确认行程重新下单。客服电话：19946187917【小助手】";
-        sendMsg(mobile, content);
+        var url = "http://localhost:8080/admin/sendMsgConflict";
+        sendMsg(mobile, url);
     }else {
         showErrorMessage("手机号不正确");
     }
@@ -333,16 +329,16 @@ $(".search-btn").on("click",function () {
     });
 });
 
-function sendMsg(mobile,content) {
+function sendMsg(mobile,url) {
     var xh;
 
-    //content = encodeURIComponent(content);
+    //content = encodeURI(encodeURI(content));
     $.ajax({
-        url:"http://localhost:8080/admin/sendMsg",
+        url:url,
         dataType: "json",
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
         type:"POST",
         data: {
-            content: content,
             mobilePhone:mobile,
             xh:xh
         },
