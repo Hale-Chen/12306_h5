@@ -1,5 +1,6 @@
 $(function () {
     dataInit();
+
 });
 
 function dataInit() {
@@ -21,15 +22,6 @@ function dataInit() {
                 var total = data.total;
                 for (var j = 0; j < data1.length; j++) {
                     var json = data1[j];
-                    // var json1 = {
-                    //     "name": json.name,
-                    //     "department": json.department1 + "-" + json.department2 + "-" + json.department3,
-                    //     "jobtitle": json.jobtitle,
-                    //     "mobile": json.mobile,
-                    //     "beDate": json.beDate,
-                    //     "status": json.status,
-                    //     "id": json.id
-                    // };
                     dataArray.push(json);
                 }
             }
@@ -38,25 +30,42 @@ function dataInit() {
                 "columns": [
                     {data: "coc"},
                     {data: "name"},
-                    {data: "taccount"},
-                    {data:"tpwd"},
+                    {
+                        render:function (data, type, row, meta) {
+                            return row["taccount"]+","+row["tpwd"];
+                        }
+                    },
+                     //{data:"tpwd"},
                     {data: "tel"},
                     {data: "passenger"},
                     {data:"from_station"},
                     {data:"to_station"},
-                    {data:"period"},
+                    {data:"date"},
                     {data:"seat_class"},
                     {data:"traincode"},
-                    {data:"date"},
+                    {data:"orderDate"},
                     {data:"random_id"},
+                    {data:"note"},
+                    // {
+                    //     "data":"id",
+                    //     "render":function (data, type, row, meta) {
+                    //         return "";
+                    //     }
+                    // },
                     {
                         "data": "id",
                         "render": function (data, type, row, meta) {
-                            return "<button data='"+data+"' class=\"btn btn-primary waves-effect delete-button\" id=\"'\"+data+\"'\"\n" +
-                                "                                >删除\n" +
-                                "                        </button>";
+                            return "<button data='"+data+"' class=\"btn btn-primary waves-effect delete-button\" id=\"'\"+data+\"'\">删除</button>";
                         }
 
+                    },
+                    {
+                        "data":"tel",
+                        "render":function (data,type,row,meta) {
+                            return "<button data = '"+data+"' class=\"btn btn-info waves-effect success-button\">短信推送（成功）</button>"+
+                                "&nbsp;&nbsp;&nbsp;<button data = '"+data+"' class=\"btn btn-warning waves-effect cross-button\">短信推送（跨站）</button>"+
+                                "&nbsp;&nbsp;&nbsp;<button data = '"+data+"' class=\"btn btn-danger waves-effect conflict-button\">短信推送（冲突）</button>";
+                        }
                     }
                 ],
                 "language": {
@@ -72,9 +81,26 @@ function dataInit() {
                         "next": "下一页",
                         "previous": "上一页"
                     }
-                }
+                },
+                dom: 'Bfrtip',
+                responsive: true,
+                buttons: [
+                          'excel'
+                    ]
 
             });
+            // $('#readyenroll-list-table').DataTable({
+            //     responsive: true
+            // });
+            //
+            // //Exportable table
+            // $('#readyenroll-list-table').DataTable({
+            //     dom: 'Bfrtip',
+            //     responsive: true,
+            //     buttons: [
+            //         'copy', 'csv', 'excel', 'pdf', 'print'
+            //     ]
+            // });
         }
 
     });
@@ -82,9 +108,9 @@ function dataInit() {
 
 }
 
-function showSuccessMessage() {
+function showSuccessMessage(content) {
     swal({
-        title: "删除成功",
+        title: content,
         type: "success",
         confirmButtonColor: "#03a8f3",
         confirmButtonText: "确定",
@@ -94,9 +120,9 @@ function showSuccessMessage() {
     });
 }
 
-function showErrorMessage() {
+function showErrorMessage(content) {
     swal({
-        title: "访问数据出错",
+        title: content,
         //text: "You will not be able to recover this imaginary file!",
         type: "error",
         //showCancelButton: true,
@@ -132,9 +158,9 @@ function showConfirmMessage(id) {
                     var success = data.success;
                     console.log(success)
                     if(success == true){
-                        showSuccessMessage();
+                        showSuccessMessage("删除成功");
                     }else{
-                        showErrorMessage();
+                        showErrorMessage("删除失败");
                     }
                 }
             });
@@ -162,6 +188,50 @@ $("body").on("click", ".delete-button", function () {
     var id = $(this).attr("data");
     console.log(id)
     showConfirmMessage(id);
+
+});
+
+$("body").on("click",".success-button",function () {
+    var mobile = $(this).attr("data");
+    console.log(mobile);
+    var rex = /^1\d{10}$/;
+    var result = rex.test(mobile);
+    if(result == false){
+        showErrorMessage("手机号不正确");
+    }else {
+        var content = "小助手抢票已完成，请尽快去12306官方进行车票支付。" +
+            "温馨提示：开车前2小时以外的车票，须在30分钟内完成支付，开车前2小时以内的车票，须在10分钟内完成支付。" +
+            "客服电话：19946187917【小助手】";
+        sendMsg(mobile, content);
+    }
+});
+
+$("body").on("click",".cross-button",function () {
+    var mobile = $(this).attr("data");
+    console.log(mobile);
+    var rex = /^1\d{10}$/;
+    var result = rex.test(mobile);
+    if(result == true) {
+        var content = "您的票已完成跨站抢票，请尽快去12306官方进行车票支付。" +
+            "温馨提示：开车前2小时以外的车票，须在30分钟内完成支付，开车前2小时以内的车票，须在10分钟内完成支付。" +
+            "客服电话：19946187917【小助手】";
+        sendMsg(mobile, content);
+    }else{
+        showErrorMessage("手机号不正确");
+    }
+});
+
+$("body").on("click",".conflict-button",function () {
+    var mobile = $(this).attr("data");
+    console.log(mobile);
+    var rex = /^1\d{10}$/;
+    var result = rex.test(mobile);
+    if(result == true) {
+        var content = "您的抢票订单与已有行程冲突，请确认行程重新下单。客服电话：19946187917【小助手】";
+        sendMsg(mobile, content);
+    }else {
+        showErrorMessage("手机号不正确");
+    }
 
 });
 
@@ -204,25 +274,36 @@ $(".search-btn").on("click",function () {
                 "columns": [
                     {data: "coc"},
                     {data: "name"},
-                    {data: "taccount"},
-                    {data:"tpwd"},
+                    {
+                        render:function (data, type, row, meta) {
+                            return row["taccount"]+","+row["tpwd"];
+                        }
+                    },
+                    // {data:"tpwd"},
                     {data: "tel"},
                     {data: "passenger"},
                     {data:"from_station"},
                     {data:"to_station"},
-                    {data:"period"},
+                    {data:"date"},
                     {data:"seat_class"},
                     {data:"traincode"},
-                    {data:"date"},
+                    {data:"orderDate"},
                     {data:"random_id"},
+                    {data:"note"},
                     {
                         "data": "id",
                         "render": function (data, type, row, meta) {
-                            return "<button data='"+data+"' class=\"btn btn-primary waves-effect delete-button\" id=\"'\"+data+\"'\"\n" +
-                                "                                >删除\n" +
-                                "                        </button>";
+                            return "<button data='"+data+"' class=\"btn btn-primary waves-effect delete-button\" id=\"'\"+data+\"'\">删除</button>";
                         }
 
+                    },
+                    {
+                        "data":"tel",
+                        "render":function (data,type,row,meta) {
+                            return "<button data = '"+data+"' class=\"btn btn-info waves-effect success-button\">短信推送（成功）</button>"+
+                                "&nbsp;&nbsp;&nbsp;<button data = '"+data+"' class=\"btn btn-warning waves-effect cross-button\">短信推送（跨站）</button>"+
+                                "&nbsp;&nbsp;&nbsp;<button data = '"+data+"' class=\"btn btn-danger waves-effect conflict-button\">短信推送（冲突）</button>";
+                        }
                     }
                 ],
                 "language": {
@@ -238,7 +319,13 @@ $(".search-btn").on("click",function () {
                         "next": "下一页",
                         "previous": "上一页"
                     }
-                }
+
+                },
+                dom: 'Bfrtip',
+                responsive: true,
+                buttons: [
+                    'excel'
+                ]
 
             });
 
@@ -246,24 +333,33 @@ $(".search-btn").on("click",function () {
     });
 });
 
-$("body").on("click", ".enroll-btn", function () {
-    var username = $.cookie("username");
+function sendMsg(mobile,content) {
+    var xh;
+
+    //content = encodeURIComponent(content);
     $.ajax({
-        url: "http://ty.yunjiglobal.com/newStaff/editStatus",
+        url:"http://localhost:8080/admin/sendMsg",
+        dataType: "json",
+        type:"POST",
         data: {
-            id: $(this).attr("data"),
-            status: 3,
-            username: username
+            content: content,
+            mobilePhone:mobile,
+            xh:xh
         },
-        success: function (data) {
-            var code = data.code;
-            if (code == 0) {
-                showSuccessMessage();
-                //window.location.reload();
+        success:function (data) {
+            var success = data.success;
+            var result = data.data;
+            var resultList = result.split(",");
+            if(success == true && resultList[0] == "1"){
+                showSuccessMessage("短信发送成功");
+            }else{
+                showErrorMessage("短信发送失败");
             }
         }
     });
-});
+}
+
+
 
 
 
